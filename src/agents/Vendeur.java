@@ -11,11 +11,12 @@ import jade.gui.GuiEvent;
 
 public class Vendeur extends GuiAgent {
     private VendeurContainer vendeurContainer;
-
+    private DFAgentDescription dfAgentDescription;
     @Override
     protected void setup() {
         vendeurContainer = (VendeurContainer) getArguments()[0];
         vendeurContainer.setVendeur(this);
+        dfAgentDescription = new DFAgentDescription();
 
     }
 
@@ -30,7 +31,7 @@ public class Vendeur extends GuiAgent {
 
     @Override
     public void onGuiEvent(GuiEvent guiEvent) {
-        DFAgentDescription dfAgentDescription = new DFAgentDescription();
+
         ServiceDescription service = new ServiceDescription();
         service.setType(guiEvent.getParameter(0).toString());
         service.setName(guiEvent.getParameter(1).toString());

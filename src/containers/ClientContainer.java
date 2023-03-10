@@ -3,6 +3,7 @@ package containers;
 import agents.Client;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
+import jade.gui.GuiEvent;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import javafx.fxml.FXML;
@@ -44,6 +45,12 @@ public class ClientContainer implements Initializable {
         AgentContainer container=runtime.createAgentContainer(profile);
         AgentController agent=container.createNewAgent("client","agents.Client",new Object[]{this});
         agent.start();
+    }
+
+    public void askServices() {
+        GuiEvent guiEvent = new GuiEvent(this, 1);
+        guiEvent.addParameter(text.getText());
+        client.onGuiEvent(guiEvent);
     }
 
     public void getServices(){
