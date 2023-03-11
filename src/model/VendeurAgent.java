@@ -17,12 +17,6 @@ public class VendeurAgent extends GuiAgent {
         vendeurContainer = (VendeurContainer) getArguments()[0];
         vendeurContainer.setVendeur(this);
         dfAgentDescription = new DFAgentDescription();
-        try {
-            DFService.register(this, dfAgentDescription);
-        } catch (FIPAException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
