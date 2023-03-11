@@ -1,8 +1,7 @@
-package agents;
+package model;
 
 import containers.ClientContainer;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -12,7 +11,7 @@ import jade.gui.GuiEvent;
 
 import java.util.Iterator;
 
-public class Client extends GuiAgent {
+public class ClientAgent extends GuiAgent {
     private ClientContainer clientContainer;
     private AID[] vendeurAgents;
      @Override

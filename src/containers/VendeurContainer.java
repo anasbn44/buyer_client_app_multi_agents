@@ -1,15 +1,12 @@
 package containers;
 
-import agents.Vendeur;
+import model.Produit;
+import model.VendeurAgent;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiEvent;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
-import jade.wrapper.StaleProxyException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -33,10 +30,16 @@ public class VendeurContainer implements Initializable {
     @FXML
     private ListView<Produit> listView;
 
-    private Vendeur vendeur;
+    private VendeurAgent vendeurAgent;
 
-    public void setVendeur(Vendeur vendeur) {
-        this.vendeur = vendeur;
+    private String nickName;
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void setVendeur(VendeurAgent vendeurAgent) {
+        this.vendeurAgent = vendeurAgent;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class VendeurContainer implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        add.setOnAction(keyEvent -> addService());
     }
 
     public void startContainer () throws Exception {
@@ -54,7 +57,7 @@ public class VendeurContainer implements Initializable {
         ProfileImpl profile=new ProfileImpl();
         profile.setParameter(ProfileImpl.MAIN_HOST,"localhost");
         AgentContainer container=runtime.createAgentContainer(profile);
-        AgentController agent=container.createNewAgent("vendeur","agents.Vendeur",new Object[]{this});
+        AgentController agent=container.createNewAgent( nickName,"model.VendeurAgent",new Object[]{this});
         agent.start();
     }
 
@@ -64,7 +67,7 @@ public class VendeurContainer implements Initializable {
         Produit produit = new Produit(nom.getText(), desc.getText(), Float.parseFloat(prix.getText()));
         guiEvent.addParameter(type.getText());
         guiEvent.addParameter(produit.toString());
-        vendeur.onGuiEvent(guiEvent);
+        vendeurAgent.onGuiEvent(guiEvent);
         listView.getItems().add(produit);
     }
 }

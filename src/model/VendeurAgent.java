@@ -1,7 +1,7 @@
-package agents;
+package model;
 
 import containers.VendeurContainer;
-import jade.core.Agent;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -9,7 +9,7 @@ import jade.domain.FIPAException;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 
-public class Vendeur extends GuiAgent {
+public class VendeurAgent extends GuiAgent {
     private VendeurContainer vendeurContainer;
     private DFAgentDescription dfAgentDescription;
     @Override
@@ -17,6 +17,11 @@ public class Vendeur extends GuiAgent {
         vendeurContainer = (VendeurContainer) getArguments()[0];
         vendeurContainer.setVendeur(this);
         dfAgentDescription = new DFAgentDescription();
+        try {
+            DFService.register(this, dfAgentDescription);
+        } catch (FIPAException e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -1,4 +1,4 @@
-package containers;
+package model;
 
 public class Produit {
     private String nom;
