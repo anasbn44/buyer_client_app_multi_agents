@@ -6,6 +6,7 @@ import jade.core.Runtime;
 import jade.gui.GuiEvent;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -48,12 +49,13 @@ public class ClientContainer implements Initializable {
     }
 
     public void askServices() {
+        listView.getItems().clear();
         GuiEvent guiEvent = new GuiEvent(this, 1);
         guiEvent.addParameter(text.getText());
         client.onGuiEvent(guiEvent);
     }
 
-    public void getServices(){
-
+    public void showServices(String service){
+        Platform.runLater(() -> listView.getItems().add(service));
     }
 }

@@ -13,7 +13,7 @@ fx:controller="containers.ClientContainer">
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <TextField fx:id="text" />
-            <Button fx:id="search" mnemonicParsing="false" text="Search" />
+            <Button fx:id="search" onAction="#askServices" mnemonicParsing="false" text="Search" />
          </children>
       </HBox>
    </top>

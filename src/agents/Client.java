@@ -10,11 +10,9 @@ import jade.domain.FIPAException;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 
+import java.util.Iterator;
+
 public class Client extends GuiAgent {
-    /*--module-path
-"C:\Program Files\Java\javafx-sdk-19\lib"
---add-modules
-javafx.controls,javafx.fxml*/
     private ClientContainer clientContainer;
     private AID[] vendeurAgents;
      @Override
@@ -34,7 +32,15 @@ javafx.controls,javafx.fxml*/
 
         try {
             DFAgentDescription[] result = DFService.search(this, dfAgentDescription);
-            vendeurAgents = new AID[result.length];
+            System.out.println(result.length);
+            for (DFAgentDescription a : result){
+                Iterator<ServiceDescription> descriptionIterator = a.getAllServices();
+                while (descriptionIterator.hasNext()){
+                    ServiceDescription myService = descriptionIterator.next();
+                    if(myService.getType().equals(search))
+                        clientContainer.showServices(myService.getName() + ", from : " + a.getName());
+                }
+            }
 
         } catch (FIPAException e) {
             e.printStackTrace();

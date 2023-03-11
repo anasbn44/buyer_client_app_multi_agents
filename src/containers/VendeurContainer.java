@@ -54,7 +54,7 @@ public class VendeurContainer implements Initializable {
         ProfileImpl profile=new ProfileImpl();
         profile.setParameter(ProfileImpl.MAIN_HOST,"localhost");
         AgentContainer container=runtime.createAgentContainer(profile);
-        AgentController agent=container.createNewAgent("server","agents.Vendeur",new Object[]{this});
+        AgentController agent=container.createNewAgent("vendeur","agents.Vendeur",new Object[]{this});
         agent.start();
     }
 
