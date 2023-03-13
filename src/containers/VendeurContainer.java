@@ -26,6 +26,8 @@ public class VendeurContainer implements Initializable {
     @FXML
     private TextField prix;
     @FXML
+    private TextField qte;
+    @FXML
     private Button add;
     @FXML
     private ListView<Produit> listView;
@@ -64,9 +66,9 @@ public class VendeurContainer implements Initializable {
     public void addService() {
         GuiEvent guiEvent = new GuiEvent(this, 1);
 
-        Produit produit = new Produit(nom.getText(), desc.getText(), Float.parseFloat(prix.getText()));
+        Produit produit = new Produit(nom.getText(), desc.getText(), Float.parseFloat(prix.getText()), Integer.parseInt(qte.getText()));
         guiEvent.addParameter(type.getText());
-        guiEvent.addParameter(produit.toString());
+        guiEvent.addParameter(produit);
         vendeurAgent.onGuiEvent(guiEvent);
         listView.getItems().add(produit);
     }

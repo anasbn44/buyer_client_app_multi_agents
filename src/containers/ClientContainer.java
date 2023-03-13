@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import model.Produit;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,7 +23,13 @@ public class ClientContainer implements Initializable {
     @FXML
     private Button search;
     @FXML
-    private ListView<String> listView;
+    private Button buy;
+    @FXML
+    private Button negociate;
+    @FXML
+    private ListView<Produit> listView;
+    @FXML
+    private ListView<String> infoListView;
 
     private String nickName;
     private ClientAgent clientAgent;
@@ -61,7 +68,14 @@ public class ClientContainer implements Initializable {
         clientAgent.onGuiEvent(guiEvent);
     }
 
-    public void showServices(String service){
+    public void showServices(Produit service){
         Platform.runLater(() -> listView.getItems().add(service));
+    }
+
+    public void buyProduct() {
+        Produit selectedItem = listView.getSelectionModel().getSelectedItem();
+        GuiEvent guiEvent = new GuiEvent(this, 2);
+        guiEvent.addParameter(selectedItem);
+        clientAgent.onGuiEvent(guiEvent);
     }
 }
