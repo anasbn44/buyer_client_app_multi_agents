@@ -15,10 +15,11 @@ import jade.util.leap.Iterator;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Base64;
 
-public class VendeurAgent extends GuiAgent {
-    private VendeurContainer vendeurContainer;
+public class VendeurAgent extends GuiAgent implements Serializable {
+    private transient VendeurContainer vendeurContainer;
     private DFAgentDescription dfAgentDescription;
     @Override
     protected void setup() {
@@ -37,12 +38,15 @@ public class VendeurAgent extends GuiAgent {
             public void action() {
                 ACLMessage response = receive();
                 if(response != null){
+                    ACLMessage aclMessage = new ACLMessage();
+                    aclMessage.addReceiver(response.getSender());
                     if(response.getPerformative() == ACLMessage.CONFIRM){
-                        ACLMessage aclMessage = new ACLMessage(ACLMessage.AGREE);
+                        aclMessage.setPerformative(ACLMessage.AGREE);
+                        System.out.println(response.getContent());
                         aclMessage.setContent("Congrats, you have bought " + response.getContent());
                         send(aclMessage);
                     } else {
-                        ACLMessage aclMessage = new ACLMessage(ACLMessage.CANCEL);
+                        aclMessage.setPerformative(ACLMessage.CANCEL);
                         send(aclMessage);
                     }
                 } else {

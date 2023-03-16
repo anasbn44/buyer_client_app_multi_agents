@@ -90,4 +90,8 @@ public class ClientContainer implements Initializable {
         guiEvent.addParameter(selectedItem);
         clientAgent.onGuiEvent(guiEvent);
     }
+
+    public void showMessage(String message) {
+        Platform.runLater(() -> infoListView.getItems().add(message));
+    }
 }

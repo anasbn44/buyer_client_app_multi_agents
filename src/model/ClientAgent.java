@@ -2,6 +2,7 @@ package model;
 
 import containers.ClientContainer;
 import jade.core.AID;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -23,6 +24,18 @@ public class ClientAgent extends GuiAgent {
     protected void setup() {
         clientContainer = (ClientContainer) getArguments()[0];
         clientContainer.setClient(this);
+
+         addBehaviour(new CyclicBehaviour() {
+             @Override
+             public void action() {
+                 ACLMessage response = receive();
+                 if (response != null) {
+                     clientContainer.showMessage(response.getContent());
+                 } else {
+                     block();
+                 }
+             }
+         });
     }
 
 
@@ -33,6 +46,7 @@ public class ClientAgent extends GuiAgent {
              ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
              aclMessage.addReceiver(produit.getAgent().getAID());
              aclMessage.setContent(produit.toString());
+             System.out.println(aclMessage.getAllReceiver() +" ---- "+ aclMessage.getContent());
              send(aclMessage);
          } else if (guiEvent.getType() == 1) {
              String search = guiEvent.getParameter(0).toString();
