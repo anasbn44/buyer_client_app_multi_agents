@@ -16,7 +16,7 @@ public class ClientAppTest extends Application {
         ConnectControllerClient connectControllerClient = new ConnectControllerClient();
         fxmlLoader.setController(connectControllerClient);
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("MyChat");
+        stage.setTitle("Buyer");
         stage.setScene(scene);
         stage.show();
     }

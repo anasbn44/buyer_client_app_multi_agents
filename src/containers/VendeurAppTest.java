@@ -16,7 +16,7 @@ public class VendeurAppTest extends Application {
         ConnectController connectController = new ConnectController();
         fxmlLoader.setController(connectController);
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("MyChat");
+        stage.setTitle("Seller");
         stage.setScene(scene);
         stage.show();
 
