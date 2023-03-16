@@ -12,10 +12,13 @@ public class VendeurAppTest extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(VendeurAppTest.class.getResource("../view/vendeur_gui.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(VendeurAppTest.class.getResource("../view/home.fxml"));
+        ConnectController connectController = new ConnectController();
+        fxmlLoader.setController(connectController);
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("MyChat");
         stage.setScene(scene);
         stage.show();
+
     }
 }

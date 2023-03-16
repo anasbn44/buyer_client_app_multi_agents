@@ -13,7 +13,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.util.Base64;
 import java.util.ResourceBundle;
 
 public class VendeurContainer implements Initializable {
@@ -25,8 +29,6 @@ public class VendeurContainer implements Initializable {
     private TextField desc;
     @FXML
     private TextField prix;
-    @FXML
-    private TextField qte;
     @FXML
     private Button add;
     @FXML
@@ -51,7 +53,13 @@ public class VendeurContainer implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        add.setOnAction(keyEvent -> addService());
+        add.setOnAction(keyEvent -> {
+            try {
+                addService();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void startContainer () throws Exception {
@@ -63,12 +71,18 @@ public class VendeurContainer implements Initializable {
         agent.start();
     }
 
-    public void addService() {
+    public void addService() throws IOException {
         GuiEvent guiEvent = new GuiEvent(this, 1);
 
-        Produit produit = new Produit(nom.getText(), desc.getText(), Float.parseFloat(prix.getText()), Integer.parseInt(qte.getText()));
+        Produit produit = new Produit(nom.getText(), desc.getText(), Float.parseFloat(prix.getText()));
+        produit.setAgent(vendeurAgent);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(produit);
+        oos.flush();
+        String encodedProduit = Base64.getEncoder().encodeToString(baos.toByteArray());
         guiEvent.addParameter(type.getText());
-        guiEvent.addParameter(produit);
+        guiEvent.addParameter(encodedProduit);
         vendeurAgent.onGuiEvent(guiEvent);
         listView.getItems().add(produit);
     }

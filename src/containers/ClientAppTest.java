@@ -12,7 +12,9 @@ public class ClientAppTest extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(VendeurAppTest.class.getResource("../view/client_gui.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(VendeurAppTest.class.getResource("../view/home.fxml"));
+        ConnectControllerClient connectControllerClient = new ConnectControllerClient();
+        fxmlLoader.setController(connectControllerClient);
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("MyChat");
         stage.setScene(scene);

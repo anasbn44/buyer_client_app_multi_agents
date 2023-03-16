@@ -30,10 +30,11 @@ public class ClientAgent extends GuiAgent {
     public void onGuiEvent(GuiEvent guiEvent) {
          if (guiEvent.getType() == 2) {
              Produit produit = (Produit) guiEvent.getParameter(0);
-             ACLMessage aclMessage = new ACLMessage(ACLMessage.PROPOSE);
+             ACLMessage aclMessage = new ACLMessage(ACLMessage.CONFIRM);
              aclMessage.addReceiver(produit.getAgent().getAID());
+             aclMessage.setContent(produit.toString());
              send(aclMessage);
-         } else {
+         } else if (guiEvent.getType() == 1) {
              String search = guiEvent.getParameter(0).toString();
              DFAgentDescription dfAgentDescription = new DFAgentDescription();
              ServiceDescription service = new ServiceDescription();
@@ -48,16 +49,12 @@ public class ClientAgent extends GuiAgent {
                      while (descriptionIterator.hasNext()) {
                          ServiceDescription myService = descriptionIterator.next();
                          if (myService.getType().equals(search)) {
-                             byte[] bytes = Base64.getDecoder().decode(myService.getName());
-                             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-                             ObjectInputStream ois = new ObjectInputStream(bais);
-                             Produit produit = (Produit) ois.readObject();
-                             clientContainer.showServices(produit);
+                             clientContainer.showServices(myService.getName());
                          }
                      }
                  }
 
-             } catch (FIPAException | IOException | ClassNotFoundException e) {
+             } catch (FIPAException e) {
                  e.printStackTrace();
              }
          }

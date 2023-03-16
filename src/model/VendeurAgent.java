@@ -1,6 +1,7 @@
 package model;
 
 import containers.VendeurContainer;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -8,8 +9,12 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
+import jade.lang.acl.ACLMessage;
 import jade.util.leap.Iterator;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Base64;
 
 public class VendeurAgent extends GuiAgent {
@@ -27,6 +32,25 @@ public class VendeurAgent extends GuiAgent {
             e.printStackTrace();
         }
 
+        addBehaviour(new CyclicBehaviour() {
+            @Override
+            public void action() {
+                ACLMessage response = receive();
+                if(response != null){
+                    if(response.getPerformative() == ACLMessage.CONFIRM){
+                        ACLMessage aclMessage = new ACLMessage(ACLMessage.AGREE);
+                        aclMessage.setContent("Congrats, you have bought " + response.getContent());
+                        send(aclMessage);
+                    } else {
+                        ACLMessage aclMessage = new ACLMessage(ACLMessage.CANCEL);
+                        send(aclMessage);
+                    }
+                } else {
+                    block();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -40,20 +64,18 @@ public class VendeurAgent extends GuiAgent {
 
     @Override
     public void onGuiEvent(GuiEvent guiEvent) {
-
-        ServiceDescription service = new ServiceDescription();
-        service.setType(guiEvent.getParameter(0).toString());
-        Produit myProduit = (Produit) guiEvent.getParameter(1);
-        myProduit.setAgent(this);
-        String encodedProduit = Base64.getEncoder().encodeToString(myProduit.toString().getBytes());
-        service.setName(encodedProduit);
-        dfAgentDescription.addServices(service);
-        Iterator allServices = dfAgentDescription.getAllServices();
-        while (allServices.hasNext()){
-            System.out.println(allServices.next().toString());
-        }
-
         try {
+            ServiceDescription service = new ServiceDescription();
+            service.setType(guiEvent.getParameter(0).toString());
+
+            service.setName(guiEvent.getParameter(1).toString());
+            dfAgentDescription.addServices(service);
+            Iterator allServices = dfAgentDescription.getAllServices();
+            while (allServices.hasNext()){
+                System.out.println(allServices.next().toString());
+            }
+
+
             DFService.modify(this, dfAgentDescription);
         } catch (FIPAException e) {
             e.printStackTrace();

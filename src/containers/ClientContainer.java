@@ -14,7 +14,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import model.Produit;
 
+import java.awt.event.KeyEvent;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URL;
+import java.util.Base64;
 import java.util.ResourceBundle;
 
 public class ClientContainer implements Initializable {
@@ -24,8 +29,6 @@ public class ClientContainer implements Initializable {
     private Button search;
     @FXML
     private Button buy;
-    @FXML
-    private Button negociate;
     @FXML
     private ListView<Produit> listView;
     @FXML
@@ -50,6 +53,7 @@ public class ClientContainer implements Initializable {
             e.printStackTrace();
         }
         search.setOnAction(keyEvent -> askServices());
+        buy.setOnAction(KeyEvent -> buyProduct());
     }
 
     public void startContainer () throws Exception {
@@ -68,8 +72,16 @@ public class ClientContainer implements Initializable {
         clientAgent.onGuiEvent(guiEvent);
     }
 
-    public void showServices(Produit service){
-        Platform.runLater(() -> listView.getItems().add(service));
+    public void showServices(String service){
+        byte[] bytes = Base64.getDecoder().decode(service);
+        try {
+            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            Produit produit = (Produit) ois.readObject();
+            Platform.runLater(() -> listView.getItems().add(produit));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void buyProduct() {

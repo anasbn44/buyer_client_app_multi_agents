@@ -2,21 +2,21 @@ package model;
 
 import jade.core.Agent;
 
-public class Produit {
+import java.io.Serializable;
+
+public class Produit implements Serializable {
     private String nom;
     private String desc;
     private float prix;
-    private int quantite;
     private Agent agent;
 
     public Produit() {
     }
 
-    public Produit(String nom, String desc, float prix, int quantite) {
+    public Produit(String nom, String desc, float prix) {
         this.nom = nom;
         this.desc = desc;
         this.prix = prix;
-        this.quantite = quantite;
     }
 
     public Agent getAgent() {
